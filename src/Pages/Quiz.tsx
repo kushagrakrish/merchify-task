@@ -1,14 +1,9 @@
 import { useEffect } from "react";
 import QuizQuestion from "../components/QuizQuestion";
 import Timer from "../components/Timer";
-import useQuizStore from "../utils/QuizStore";
 import { QuestionData } from "../data/questions";
+import useQuizStore from "../utils/QuizStore";
 
-interface Question {
-  question: string;
-  options: string[];
-  answer: string;
-}
 const Quiz = () => {
   const { questions, setQuestions } = useQuizStore();
 
@@ -18,15 +13,13 @@ const Quiz = () => {
       return shuffledData.slice(0, count);
     };
 
-    // Assuming you have a `data` array containing all your questions
     const randomQuestions = getRandomQuestions(QuestionData, 5);
 
     setQuestions(randomQuestions);
   }, []);
 
   if (questions.length === 0) {
-    // Handle loading state or wait for questions to load
-    return <div>Loading questions...</div>;
+    return <div>Loading questions please wait...</div>;
   }
   return (
     <>
