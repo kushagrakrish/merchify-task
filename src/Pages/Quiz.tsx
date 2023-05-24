@@ -16,7 +16,7 @@ const Quiz = () => {
     const randomQuestions = getRandomQuestions(QuestionData, 5);
 
     setQuestions(randomQuestions);
-  }, []);
+  }, [setQuestions]);
 
   if (questions.length === 0) {
     return <div>Loading questions please wait...</div>;
