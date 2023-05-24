@@ -32,7 +32,7 @@ const ModalContentCard = () => {
         <div className='flex flex-col gap-y-3 mt-5 xs:py-6 xs:gap-y-10'>
           {items?.map((item: any, idx: number) => (
             <>
-              <div className='xs:flex items-center gap-x-5'>
+              <div key={idx} className='xs:flex items-center gap-x-5'>
                 <div>{item.icon}</div>
                 <div>
                   <h2 className='font-semibold text-lg xs:text-xl text-[#4a4a68]'>

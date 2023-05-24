@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
 import { FaWhatsappSquare } from "react-icons/fa";
-import { QuizContext } from "../context/QuizContext";
+import useQuizStore from "../utils/QuizStore";
 
 const IconItems = [
   {
@@ -24,20 +23,16 @@ const IconItems = [
 ];
 
 const Result = () => {
-  const contextValue = useContext(QuizContext);
-
-  if (!contextValue) {
-    return null;
-  }
-
-  const { time, rightAns } = contextValue;
+  const { time, rightAns } = useQuizStore();
 
   const formatTime = (time: number): string => {
-    const minutes = Math.floor(time / 60);
-    const remainingSeconds = time % 60;
+    const maxTime = 5 * 60; // 5 minutes in seconds
+    const timeDifference = maxTime - time;
+    const minutes = Math.floor(timeDifference / 60);
+    const seconds = timeDifference % 60;
 
     const formattedMinutes = minutes.toString().padStart(2, "0");
-    const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
+    const formattedSeconds = seconds.toString().padStart(2, "0");
 
     return `${formattedMinutes}:${formattedSeconds}`;
   };
@@ -52,7 +47,6 @@ const Result = () => {
       desc: formatTime(time) + " mins.",
     },
   ];
-
   return (
     <>
       <div className='min-h-screen bg-gray-100 px-5 pt-6'>
@@ -85,7 +79,7 @@ const Result = () => {
             <div className='flex w-full md:w-60 mx-auto'>
               {/* Score in No */}
               {items?.map((item, idx) => (
-                <div className='text-center w-1/2 md:text-lg'>
+                <div key={idx} className='text-center w-1/2 md:text-lg'>
                   <p className='font-semibold text-gray-800'>{item.title}:</p>
                   <p className='font-semibold text-gray-800'>{item.desc}</p>
                 </div>
@@ -99,7 +93,10 @@ const Result = () => {
           <div className=' md:block mt-2'>
             <div className='max-w-max mx-auto grid grid-cols-2 gap-4 py-1 md:grid-flow-row md:flex'>
               {IconItems?.map((item, idx) => (
-                <div className='flex items-center space-x-1 cursor-pointer'>
+                <div
+                  key={idx}
+                  className='flex items-center space-x-1 cursor-pointer'
+                >
                   {item.icon}
                   <p className='text-xs text-gray-800 font-bold hover:text-gray-400 md:text-sm hover:ease-in hover:delay-100'>
                     {item.desc}

@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QuizContext } from "../context/QuizContext";
+import useQuizStore from "../utils/QuizStore";
 
 const QuizQuestion = () => {
   const navigate = useNavigate();
-  const [currentAns, setCurrentAns] = useState<string>("");
+  const [currentAns, setCurrentAns] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
-  const contextValue = useContext(QuizContext);
+  const { questNo, setQuestNo, rightAns, setRightAns, questions } =
+    useQuizStore();
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentAns(event.target.value);
@@ -29,17 +30,19 @@ const QuizQuestion = () => {
   };
 
   useEffect(() => {
-    if (contextValue) {
-      setIsNextButtonDisabled(selectedOption === "");
-    }
-  }, [selectedOption, contextValue]);
+    setSelectedOption(currentAns);
+  }, [currentAns]);
 
-  if (!contextValue) {
+  useEffect(() => {
+    setIsNextButtonDisabled(selectedOption === "");
+  }, [selectedOption]);
+
+  if (!questions.length) {
     return <div>Loading questions...</div>;
   }
-  const { questNo, setQuestNo, rightAns, setRightAns, questions } =
-    contextValue;
+
   const currentQuestion = questions[questNo - 1];
+
   return (
     <>
       <div className='px-20'>
@@ -76,7 +79,7 @@ const QuizQuestion = () => {
           <button
             onClick={handleNextQuestion}
             className={`bg-[#68258a] rounded-md w-36 font-semibold max-w-140px px-4 py-2 text-white ${
-              isNextButtonDisabled ? "cursor-not-allowed bg-[#68258a8f]" : ""
+              isNextButtonDisabled ? "cursor-not-allowed bg-[#952ec966]" : ""
             }`}
             disabled={isNextButtonDisabled}
           >
@@ -90,8 +93,11 @@ const QuizQuestion = () => {
           }`}
         >
           <button
+            disabled={isNextButtonDisabled}
             onClick={handleNextQuestion}
-            className='bg-[#68258a] rounded-20px max-w-140px px-4 py-2 text-white'
+            className={`bg-[#68258a] rounded-md w-36 font-semibold max-w-140px px-4 py-2 text-white ${
+              isNextButtonDisabled ? "cursor-not-allowed bg-[#952ec966]" : ""
+            }`}
           >
             Submit
           </button>

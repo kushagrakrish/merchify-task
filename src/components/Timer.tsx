@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { QuizContext } from "../context/QuizContext";
+import useQuizStore from "../utils/QuizStore";
 
 const formatTime = (time: number): string => {
   const minutes = Math.floor(time / 60);
@@ -14,15 +14,9 @@ const formatTime = (time: number): string => {
 
 const Timer = () => {
   const navigate = useNavigate();
-  const contextValue = useContext(QuizContext);
+  const { time, setTime, questNo } = useQuizStore() || {};
 
   useEffect(() => {
-    if (!contextValue) {
-      return;
-    }
-
-    const { time, setTime } = contextValue;
-
     const interval = setInterval(() => {
       if (time > 0) {
         setTime(time - 1);
@@ -35,9 +29,13 @@ const Timer = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [contextValue, navigate]);
+  }, [time, setTime, navigate]);
 
-  const { questNo, time } = contextValue || {};
+  // const minutes = Math.floor(time / 60);
+  // const remainingSeconds = time % 60;
+
+  // const formattedMinutes = minutes.toString().padStart(2, "0");
+  // const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
   return (
     <>
       <div className='flex justify-between px-20 items-center mb-3'>

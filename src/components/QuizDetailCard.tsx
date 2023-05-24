@@ -21,7 +21,7 @@ const QuizDetailCard = () => {
   return (
     <>
       {items?.map((item, idx) => (
-        <div className='flex gap-2'>
+        <div key={idx} className='flex gap-2'>
           {item.icon}
           <p key={idx} className='text-xs font-semibold sm:text-base my-1'>
             {item.desc}

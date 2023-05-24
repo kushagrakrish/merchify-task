@@ -49,8 +49,8 @@ const QuizInfoCard = () => {
       <p className='font-semibold text-lg xs:text-xl my-2 text-[#323247]'>
         The Quiz includes
       </p>
-      {items?.map((item: any) => (
-        <div className='flex gap-2 pt-2'>
+      {items?.map((item: any, idx) => (
+        <div key={idx} className='flex gap-2 pt-2'>
           {item.icon}
           <p className='text-sm xs:text-base font-bold text-gray-600'>
             {item.desc}
